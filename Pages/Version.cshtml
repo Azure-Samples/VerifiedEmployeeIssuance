@@ -1,0 +1,22 @@
+﻿@page
+@model MyAccountLinkedInPilot.Pages.VersionModel
+@{
+}
+<table class="table table-sm table-borderless">
+    <tr>
+        <td>Manifest</td>
+        <td>@ViewData["VerifiedEmployeeId:manifest"]</td>
+    </tr>
+    <tr>
+        <td>Authority</td>
+        <td>@ViewData["VerifiedEmployeeId:Authority"]</td>
+    </tr>
+    <tr>
+        <td>Tenantid VC Service</td>
+        <td>@ViewData["VerifiedIDService:TenantId"]</td>
+    </tr>
+    <tr>
+        <td>ClientId VC Service</td>
+        <td>@ViewData["VerifiedIDService:ClientId"]</td>
+    </tr>
+</table>

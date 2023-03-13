@@ -1,0 +1,30 @@
+﻿@page
+@{
+    //use the barebone Fluent layout
+    Layout = "_Layout_Fluent";
+}
+@model IndexModel
+@using MyAccountPage.Models
+@{
+    ViewData["Title"] = "Retrieve your Verified Employment ID";
+}
+
+<div id="progress-ring" class="progress-ring-container justify-content-center container-fluid vcenter" style="height: 100vh; display:flex">
+    <div class="fluent-progress-ring"><fluent-progress-ring></fluent-progress-ring></div>
+    <div class="progress-text">Retrieving credentials</div>
+</div>
+
+<div id="error" class="justify-content-center container-fluid vcenter" style="height: 100vh display:none">
+    <div class="error-text fw-bold fs-1">Can't get your Verified ID details right now</div>
+    </br>
+    <div>There was an error processing your request. Please try again later or contact your admin for support.</div>
+    </br>
+    <div>Your administrator might require the following error message:</div>
+    <div id="errormessage" class="fw-lighter">Something really bad happened.</div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/LIIssuance.js" defer></script>
+
+}
+

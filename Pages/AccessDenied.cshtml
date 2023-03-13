@@ -1,0 +1,26 @@
+﻿@page
+@{
+    //use the barebone Fluent layout
+    Layout = "_Layout_Fluent";
+}
+@model MyAccountPage.Pages.AccessDeniedModel
+@{
+
+}
+<div id="error" class="justify-content-center container-fluid vcenter" style="height: 100vh">
+    <div class="error-text fw-bold fs-1">Access denied</div>
+    </br>
+    <div>You do not have access to retrieve or view your Verified ID details. Please try again later or contact your admin for support.</div>
+    </br>
+    <div>Your administrator might require the following error message:</div>
+    @*        <div><center>Add your custom message here!</center></div>
+    *@
+    @if (@Model.requiredUserrole != null)
+    {
+        <div id="errormessage" class="fw-lighter">You don't have access, your user account needs to have the '@Model.requiredUserrole' role to get access..    </div>
+    }
+    else
+    {
+        <div id="errormessage" class="fw-lighter">You don't have access.</div>
+    }
+</div>   

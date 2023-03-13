@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "identityapp2": {
+      "type": "identityapp"
+    }
+  }
+}

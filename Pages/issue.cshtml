@@ -1,0 +1,77 @@
+﻿@page
+@model IssueModel
+@using MyAccountPage.Models
+@{
+    ViewData["Title"] = "Verified Employment ID Issuance";
+}
+<div>
+    <h2>Welcome to the Verified Employee Issuance page</h2>
+    <p><strong>You'll retrieve and save your Verified Employee ID to verify your employment status in your Microsoft Authenticator wallet.</strong></p>
+</div>
+<script src="~/js/qrcode.min.js"></script>
+@section scripts {
+
+    <script type="text/javascript" src="~/js/Issue.js"></script>
+}
+<p>Your Verified Employee ID will contain:</p>
+@{
+    UserData user = (UserData)ViewData["GraphApiResult"];
+}
+<table class="table table-sm table-borderless">
+    <tr>
+        <td>Displayname</td>
+        <td>@user.displayName</td>
+    </tr>
+    <tr>
+        <td>Given name</td>
+        <td>@user.givenName</td>
+    </tr>
+    <tr>
+        <td>Surname</td>
+        <td>@user.surname</td>
+    </tr>
+    <tr>
+        <td>Mail</td>
+        <td>@user.mail</td>
+    </tr>
+    <tr>
+        <td>Jobtitle</td>
+        <td>@user.jobtitle</td>
+    </tr>
+    <tr>
+        <td>RevocationId</td>
+        <td>@user.revocationId</td>
+    </tr>
+    <tr>
+        <td>PreferredLanguage</td>
+        <td>@user.preferredLanguage</td>
+    </tr>
+    <tr>
+        <td>Your profile picture</td>
+        <td><img width=100 src="data:image/png;base64, @user.photo" /></td>
+    </tr>
+</table>
+<br />
+<br />
+
+            <button type="button" id="sign-in" class="button">Retrieve your Verified Employee ID</button>
+            <div id="errorMessage"></div>
+            <br />
+            <div id="qrText"  style="display:none;">
+                <p style="text-align: center" class="small-text">
+                    <img src="~/images/authenticator-icon.png" alt="Authenticator icon" class="icon-small"><br>
+                    Scan with Microsoft Authenticator
+                </p>
+            </div>
+            <a id="deeplink" style="display: none;margin-top: 10px;">Tap to open Authenticator on mobile</a>
+            <div id="qrcode" style="text-align: center"></div>
+            <div id="pinCodeText" style="display: none"></div>
+
+            <div id="message-wrapper" class="margin-bottom-75 margin-top-75" style="display: none">
+               <i class="fas fa-user-check green icon-text-large margin-bottom-25"></i>
+               <div id="message"></div>
+               <br />
+               <div id="payload"></div>
+            </div>
+            
+<div class="text-muted">This is a temporary page</div>
