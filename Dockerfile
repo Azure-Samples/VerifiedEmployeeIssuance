@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["MyAccountLinkedInPilot.csproj", "."]
-RUN dotnet restore "./MyAccountLinkedInPilot.csproj"
+COPY ["MyAccountPage.csproj", "."]
+RUN dotnet restore "./MyAccountPage.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "MyAccountLinkedInPilot.csproj" -c Release -o /app/build
+RUN dotnet build "MyAccountPage.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MyAccountLinkedInPilot.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "MyAccountPage.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MyAccountLinkedInPilot.dll"]
+ENTRYPOINT ["dotnet", "MyAccountPage.dll"]

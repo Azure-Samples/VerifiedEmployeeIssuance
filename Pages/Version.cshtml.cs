@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Graph;
 
-namespace MyAccountLinkedInPilot.Pages
+namespace MyAccountPage.Pages
 {
     public class VersionModel : PageModel
     {
