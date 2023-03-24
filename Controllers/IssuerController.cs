@@ -218,7 +218,7 @@ namespace MyAccountPage
 
                     HttpClient client = new HttpClient();
                     var defaultRequestHeaders = client.DefaultRequestHeaders;
-                    defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.token);
+                    defaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.token+"!");
 
                     HttpResponseMessage res = await client.PostAsync(_configuration["VerifiedIDService:Endpoint"] + "verifiableCredentials/createIssuanceRequest", new StringContent(jsonString, Encoding.UTF8, "application/json"));
                     response = await res.Content.ReadAsStringAsync();

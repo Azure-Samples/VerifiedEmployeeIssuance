@@ -44,7 +44,7 @@ signIn.addEventListener('click', () => {
                     var checkStatus = setInterval(function () {
                         fetch('api/issuer/issuance-response?id=' + respIssuanceReq.id)
                             .then(response => response.text())
-                            .catch(error => showError(error)
+                            
                                 .then(response => {
                                     if (response.length > 0) {
                                         console.log(response)
@@ -73,7 +73,7 @@ signIn.addEventListener('click', () => {
                                         }
                                     }
                                 })
-                    )}, 1500); //change this to higher interval if you use ngrok to prevent overloading the free tier service
+                    }, 1500); //change this to higher interval if you use ngrok to prevent overloading the free tier service
 
                 }
             }
