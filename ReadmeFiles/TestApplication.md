@@ -1,4 +1,4 @@
-#Test your deployment
+# Test your deployment
 
 Easiest is to navigate to `https://<your webapp url>/issue` this should allow you to sign in and show your profile data. If this is working the first part of the configuration is done correctly. If you press the button and a QR code is shown the security setup is working 100%. If you can scan the QR code and issue yourself a VC in Authenticator the VC service is working and the configuration of the webapp is complete.
 
