@@ -127,6 +127,8 @@ $PermissionName = "VerifiableCredential.Create.IssueRequest"
 # Install the module
 Install-Module AzureAD
 
+Connect-AzureAD -TenantId $TenantID
+
 $MSI = (Get-AzureADServicePrincipal -Filter "displayName eq '$DisplayNameOfMSI'")
 
 Start-Sleep -Seconds 10
