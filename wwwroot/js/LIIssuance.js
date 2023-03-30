@@ -17,7 +17,7 @@ function CreateIssuanceRequest() {
                     }
                     else {
                         //window.location.href = respIssuanceReq.url;
-                        window.location.href = "linkedin://" + encodeURIComponent(respIssuanceReq.url);
+                        window.location.href = "linkedin://openid-vc?url=" + encodeURIComponent(respIssuanceReq.url);
                         //if no redirect is happening you are not launched back to the native mobile app!
                         setTimeout(function () {
                             showError("You can't retrieve your Verified ID here. Try again on your mobile device.");

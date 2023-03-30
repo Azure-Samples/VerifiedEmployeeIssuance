@@ -78,7 +78,7 @@ namespace MyAccountPage.Pages
             }
             catch (ServiceException ex)
             {
-                _logger.LogError(ex, "Error getting user data");
+                _logger.LogError(ex, "Error getting user data:"+ ex.Message);
                 return RedirectToPage("/Error");
             }
             
