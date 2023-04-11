@@ -196,6 +196,20 @@ And the last bit is your configuration for your Verified Employee credential and
     "Authority": "YOUR VC SERVICE AUTHORITY/DID"
   },
 ```
+
+If you want to add Azure Key Vault for storing secrets, add the following configuration section. 
+```
+"KeyVault": {
+  "Name": "YOUR KEYVAULT NAME",
+  "SecretsPrefix": "",
+  "ReloadIntervalInMinutes": 15
+},
+```
+The Name is the name of your key vault (not the full url).
+The secrets prefix is optional and can be used if you store multiple applications in the same key vault. 
+The reload interval is the interval in minutes the application will reload the secrets from the key vault. This is useful if you want to change the configuration without restarting the application.
+
+
 If you want to configure the app through web app configuration navigates to your created web app and select configuration on the left-hand side.
 
 ![Web Application Configuration](Images/WebApplicationConfiguration.png)
