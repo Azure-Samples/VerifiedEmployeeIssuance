@@ -275,7 +275,7 @@ Type `dotnet publish –configuration Release`
 
 Type `Compress-Archive bin\release\net6.0\publish\* -DestinationPath bin\release\releasepackage.zip` to create the zip file with the solution.
 
-Make sure az CLI is installed from:[]()
+Make sure az CLI is installed from:[https://learn.microsoft.com/en-us/cli/azure/install-azure-cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 
 Type `az login` Optionally you can use `az login –tenant <YOUR TENANT>`
 
