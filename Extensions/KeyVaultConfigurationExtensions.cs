@@ -9,7 +9,7 @@ namespace MyAccountPage
         public static IConfigurationBuilder ConfigureAzureKeyVault(this WebApplicationBuilder builder)
         {
             var kvName = builder.Configuration["KeyVault:Name"];
-            if (kvName is null)
+            if (string.IsNullOrWhiteSpace(kvName))
                 return builder.Configuration;
 
             var kvPrefix = builder.Configuration["KeyVault:SecretsPrefix"];
