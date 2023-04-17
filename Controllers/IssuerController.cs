@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using MyAccountPage.Models;
@@ -16,6 +15,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Azure.Core;
 using Azure.Identity;
+using System.Security.Claims;
 
 namespace MyAccountPage
 {
@@ -25,7 +25,7 @@ namespace MyAccountPage
     {
         const string ISSUANCEPAYLOAD = "issuance_request_config.json";
 
-        private readonly GraphServiceClient _graphServiceClient;
+       // private readonly GraphServiceClient _graphServiceClient;
         private readonly IConfiguration _configuration;
         protected readonly IHttpClientFactory _httpClientFactory;
         protected IMemoryCache _cache;
@@ -35,13 +35,13 @@ namespace MyAccountPage
         private UserData? _userdata;
 
         public IssuerController(ILogger<IssuerController> logger,
-                                GraphServiceClient graphServiceClient,
+                                //GraphServiceClient graphServiceClient,
                                 IConfiguration configuration,
                                 IHttpClientFactory httpClientFactory,
                                 IMemoryCache memoryCache)
         {
             _log = logger;
-            _graphServiceClient = graphServiceClient;
+            //_graphServiceClient = graphServiceClient;
             _configuration = configuration;
             _apiKey = System.Environment.GetEnvironmentVariable("API-KEY");
             _httpClientFactory = httpClientFactory;
@@ -58,44 +58,23 @@ namespace MyAccountPage
         {
             //retrieve information from the user to be able to create the payload for the idtokenhint issuance request
             _userdata = new UserData();
-            Microsoft.Graph.User user;
-            try
+            //var tokenValue = await HttpContext.GetTokenAsync("access_token");
+            var tokenclaims = User.Claims;
+
+            foreach (var claim in tokenclaims)
             {
-                user = await _graphServiceClient.Me
-                    .Request()
-                    .Select("displayName,givenName,jobTitle,preferredLanguage,surname,mail,userPrincipalName")
-                    .GetAsync();
-
-                _userdata.displayName = user.DisplayName;
-                _userdata.givenName = user.GivenName;
-                _userdata.jobtitle = user.JobTitle;
-                _userdata.preferredLanguage = user.PreferredLanguage;
-                _userdata.surname = user.Surname;
-                _userdata.mail = user.Mail;
-                _userdata.revocationId = user.UserPrincipalName;
-
-                try
-                {
-                    var photo = await _graphServiceClient.Me.Photos["648x648"].Content
-                        .Request()
-                        .GetAsync();
-                    if (photo != null)
-                    {
-                        var photoArray = (photo as MemoryStream).ToArray();
-                        var encoded = Base64UrlEncoder.Encode(photoArray);
-                        _userdata.photo = encoded;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _log.LogError(ex, "Error getting photo");
-                }
-
+                Debug.WriteLine(claim.Type + ":" + claim.Value);
             }
-            catch (ServiceException ex)
-            {
-                return BadRequest(new { error = "400", error_description = "Something went wrong retrieving the user profile: " + ex.Message });
-            }
+
+            _userdata.displayName = User.Identity.Name;
+            _userdata.surname = tokenclaims?.FirstOrDefault(x => x.Type.Equals("family_name", StringComparison.OrdinalIgnoreCase))?.Value;
+            _userdata.givenName = tokenclaims?.FirstOrDefault(x => x.Type.Equals("given_Name", StringComparison.OrdinalIgnoreCase))?.Value;
+            _userdata.jobtitle = tokenclaims?.FirstOrDefault(x => x.Type.Equals("title", StringComparison.OrdinalIgnoreCase))?.Value;
+            _userdata.mail = tokenclaims?.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Email, StringComparison.OrdinalIgnoreCase))?.Value;
+
+            //_userdata.preferredLanguage = user.PreferredLanguage;
+            _userdata.revocationId = _userdata.mail;
+            _userdata.photo = _userdata.defaultUserPhoto;
 
             try
             {

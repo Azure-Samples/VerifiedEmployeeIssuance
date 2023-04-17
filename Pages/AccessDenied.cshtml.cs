@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Graph;
 using MyAccountPage.Models;
 
 namespace MyAccountPage.Pages

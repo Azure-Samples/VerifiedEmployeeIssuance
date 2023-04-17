@@ -1,25 +1,45 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MyAccountPage;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var initialScopes = builder.Configuration["MicrosoftGraph:Scopes"]?.Split(' ');
-
 // Add services to the container.
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
-    .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
-    .AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
-    .AddInMemoryTokenCaches(); //we might need to change this to scale the app
+builder.Services.AddAuthentication(options => {
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddOpenIdConnect(options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.Authority = builder.Configuration["AzureAd:Domain"];
+        options.RequireHttpsMetadata = true;
+        options.ClientId = builder.Configuration["AzureAd:ClientId"];
+        options.ClientSecret = builder.Configuration["AzureAd:ClientSecret"];
+        options.ResponseType = OpenIdConnectResponseType.Code;
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+        options.Scope.Add("offline_access");
+        options.GetClaimsFromUserInfoEndpoint = true;
+        //options.ClaimActions.MapJsonKey("title", "title");
+        options.SaveTokens = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = "name",
+            RoleClaimType = "groups",
+            ValidateIssuer = true
+        };
+    });
 
-builder.Services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options => options.Events = new RejectSessionCookieWhenAccountNotInCacheEvents());
+//builder.Services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options => options.Events = new RejectSessionCookieWhenAccountNotInCacheEvents());
 builder.Services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme, options => options.AccessDeniedPath = "/AccessDenied");
 
 builder.Services.AddAuthorization(options =>
@@ -57,7 +77,7 @@ else
     });
 }
 
-
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
@@ -68,8 +88,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
 });
 
-builder.Services.AddRazorPages()
-    .AddMicrosoftIdentityUI();
+builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient(); // use iHttpFactory as best practice, should be easy to use extra retry and hold off policies in the future
 
@@ -89,6 +108,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    IdentityModelEventSource.ShowPII = true;
 }
 else
 {
