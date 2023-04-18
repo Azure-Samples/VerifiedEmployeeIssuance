@@ -2,6 +2,7 @@ Verified Employee Issuance Readme
 
 - Architecture overview
 - [Setup and deploy instructions](ReadmeFiles/Deployment.md)
+- [Grant user access](ReadmeFiles/GrantingAccess.md) to the Webapp
 - [Test your deployed web application](ReadmeFiles/TestApplication.md)
 
 # Architecture overview
