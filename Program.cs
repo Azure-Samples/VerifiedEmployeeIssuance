@@ -2,13 +2,12 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MyAccountPage;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.ConfigureAzureKeyVault();
 
 var initialScopes = builder.Configuration["MicrosoftGraph:Scopes"]?.Split(' ');
 
