@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MyAccountPage.Pages
 {
-    [Authorize]
+    [Authorize(Policy = "alloweduser")]
     public class IssueModel : PageModel
     {
         private readonly GraphServiceClient _graphServiceClient;
