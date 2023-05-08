@@ -21,8 +21,14 @@ To be able to show a custom error message to your users the webapp supports assi
 
 ![Enterprise App App roles](Images/EnterpriseAppRoles.png)
 
-Once the app role is configured. Remember the name. This needs to be configured in the appsettings.json file or the configuration of the application.
-```"AzureAd": {
+Once the app role is configured. Remember the name. This needs to be configured in the azure portal as configuration of your azure webapp or through appsettings.json 
+
+```AzureAd__AllowedUsersRole``` with the correct rolename
+
+or through appsettings.json
+
+```
+"AzureAd": {
     "AllowedUsersRole": "LinkedInPilotUser",
 ```
 

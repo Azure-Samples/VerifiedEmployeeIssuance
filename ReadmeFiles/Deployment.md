@@ -156,47 +156,12 @@ In the permissions screen you should see the managed identity has permissions to
 ## 7 Web application configuration
 This step will configure the web app with all the settings we noted down during the steps before.
 
-There are a few ways to configure an application. The easiest way is to modify the appsettings.json file and deploy that with your application. It is also possible to override any of that config through configuration in the azure portal on the configuration page of the webapp. It is highly recommended to make the configuration through the configuration settings instead of directly in the appsettings.json. For the webapp there is no difference. For clarity we will discuss the settings through the appconfiguration.json file.
+There are a few ways to configure an application. You can deploy a combination of appsettings.json and through configuration in the azure portal overwriting any of the config from the appsettings.json file.
+It's probably easiest to leave the appsettings.json file and use the provided configuration. 
 
-Your config should look something like this:
-```
-  "AzureAd": {
-    "Instance": "https://login.microsoftonline.com/",
-    "Domain": "<YOUR USERS DOMAIN>",
-    "TenantId": "<YOUR TENANT ID>",
-    "ClientId": "<YOUR CLIENT ID>",
-    "CallbackPath": "/signin-oidc",
+For clarity we will discuss the settings through the appconfiguration.json file, but recommend copying the settings for the web app configuration through the portal.
 
-    //recommended to use KeyVault for certificates
-    "ClientCredentials": [
-      {
-        "SourceType": "KeyVault",
-        "KeyVaultUrl": "https://<YOUR KEYVAULT>.vault.azure.net/",
-        "KeyVaultCertificateName": "<YOUR CERTIFICATENAME>"
-      }
-    ]
-  },
-```
-The part for the Verified ID service looks like this:
-```
-"VerifiedIDService": {
-    //this is the recommend and default deployment model for azure webapps
-    //user a managed identity to access the VC service, make sure you configured the service principal with the correct permissions
-    //
-    "SourceType": "SignedAssertionFromManagedIdentity",
-
-    "Endpoint": "https://verifiedid.did.msidentity.com/v1.0/",
-    "VCServiceScope": "3db474b9-6a0c-4840-96ac-1fceb342124f/.default"
-  },
-```  
-And the last bit is your configuration for your Verified Employee credential and Authority
-```
-  "VerifiedEmployeeId": {
-    "manifest": "MANIFEST URL FROM YOUR VERIFIED EMPLOYEE CONTRACT",
-    "Authority": "YOUR VC SERVICE AUTHORITY/DID"
-  },
-```
-If you want to configure the app through web app configuration navigates to your created web app and select configuration on the left-hand side.
+You can configure the app through web app configuration, navigate to your created web app and select configuration on the left-hand side.
 
 ![Web Application Configuration](Images/WebApplicationConfiguration.png)
 Select configuration and click on Advanced Edit. Replace the configuration with this and replace the values with your own noted values:
@@ -250,6 +215,47 @@ Select configuration and click on Advanced Edit. Replace the configuration with 
 ]
 ```
 Save the configuration.
+
+Now the configuration is completed you can see the details from appsettings.json which are the same settings as you just did through the web app configuration.
+
+Your config should look something like this:
+```
+  "AzureAd": {
+    "Instance": "https://login.microsoftonline.com/",
+    "Domain": "<YOUR USERS DOMAIN>",
+    "TenantId": "<YOUR TENANT ID>",
+    "ClientId": "<YOUR CLIENT ID>",
+    "CallbackPath": "/signin-oidc",
+
+    //recommended to use KeyVault for certificates
+    "ClientCredentials": [
+      {
+        "SourceType": "KeyVault",
+        "KeyVaultUrl": "https://<YOUR KEYVAULT>.vault.azure.net/",
+        "KeyVaultCertificateName": "<YOUR CERTIFICATENAME>"
+      }
+    ]
+  },
+```
+The part for the Verified ID service looks like this:
+```
+"VerifiedIDService": {
+    //this is the recommend and default deployment model for azure webapps
+    //user a managed identity to access the VC service, make sure you configured the service principal with the correct permissions
+    //
+    "SourceType": "SignedAssertionFromManagedIdentity",
+
+    "Endpoint": "https://verifiedid.did.msidentity.com/v1.0/",
+    "VCServiceScope": "3db474b9-6a0c-4840-96ac-1fceb342124f/.default"
+  },
+```  
+And the last bit is your configuration for your Verified Employee credential and Authority
+```
+  "VerifiedEmployeeId": {
+    "manifest": "MANIFEST URL FROM YOUR VERIFIED EMPLOYEE CONTRACT",
+    "Authority": "YOUR VC SERVICE AUTHORITY/DID"
+  },
+```
 
 ## 8 Deploying the Web application
 ### Deploy with Visual Studio
